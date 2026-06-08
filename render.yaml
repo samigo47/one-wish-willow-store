@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: one-wish-willow
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python server.py"
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: OWW_PUBLIC_BASE_URL
+        sync: false
+      - key: OWW_ADMIN_PASSWORD
+        sync: false
+      - key: OWW_SMTP_HOST
+        value: smtp.gmail.com
+      - key: OWW_SMTP_PORT
+        value: 587
+      - key: OWW_SMTP_USER
+        sync: false
+      - key: OWW_SMTP_PASS
+        sync: false
+      - key: OWW_FROM_EMAIL
+        sync: false
+      - key: OWW_FROM_NAME
+        value: ONE WISH WILLOW
+      - key: OWW_ADMIN_EMAIL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
