@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | One Wish Willow</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="checkout">
+  <header class="site-header">
+    <a href="index.html" class="logo-link" aria-label="One Wish Willow home">
+      <img src="assets/headertext.png" alt="One Wish Willow" />
+    </a>
+    <a class="top-buy cart-link" href="checkout.html">Cart <span data-cart-count>0</span></a>
+  </header>
+
+  <main class="checkout-shell">
+    <a class="back-link" href="index.html">&lt; Home</a>
+    <section class="checkout-grid">
+      <aside class="order-panel">
+        <h1>Cart</h1>
+        <div class="cart-line">
+          <img src="assets/OWW-Pyramid-Motion-15fps.webp" alt="One Wish Willow" />
+          <div>
+            <h2>One Wish Willow</h2>
+            <p>Limit 5.</p>
+            <p class="line-price">$6.99 each</p>
+          </div>
+        </div>
+        <div class="quantity-line checkout-qty">
+          <button type="button" data-cart-qty="decrease" aria-label="Decrease quantity">-</button>
+          <output data-cart-quantity>1</output>
+          <button type="button" data-cart-qty="increase" aria-label="Increase quantity">+</button>
+        </div>
+        <p class="limit-note" data-limit-note>Maximum quantity is 5 per order.</p>
+        <div class="summary-lines">
+          <div><span>Subtotal</span><strong data-subtotal>$6.99</strong></div>
+          <div><span>Shipping</span><strong data-shipping>+ $4.00 shipping</strong></div>
+          <div><span>Total due now</span><strong data-total>$10.99</strong></div>
+        </div>
+      </aside>
+
+      <section class="shipping-panel">
+        <h1>Shipping</h1>
+        <p class="form-note">Enter your delivery details exactly. Updates will be sent to the email address you provide.</p>
+        <form id="shipping-form">
+          <label>
+            Full name
+            <input name="name" autocomplete="name" required />
+          </label>
+          <label>
+            Email address
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Street address
+            <input name="address" autocomplete="street-address" required />
+          </label>
+          <div class="form-row">
+            <label>
+              City
+              <input name="city" autocomplete="address-level2" required />
+            </label>
+            <label>
+              State
+              <input name="state" autocomplete="address-level1" required maxlength="24" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              ZIP code
+              <input name="zip" autocomplete="postal-code" required />
+            </label>
+            <label>
+              Phone optional
+              <input name="phone" autocomplete="tel" />
+            </label>
+          </div>
+          <button class="buy-button form-submit" type="submit">Continue To Payment</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="status.html">Check Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </footer>
+  <script src="script.js?v=decision1"></script>
+</body>
+</html>
+
+
+
+
+
