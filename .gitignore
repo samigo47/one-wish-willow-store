@@ -1,0 +1,6 @@
+.env
+work/backend-data/
+work/cloudflared.exe
+work/cloudflared*.log
+__pycache__/
+*.pyc
