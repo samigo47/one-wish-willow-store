@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="One Wish Willow is in stock. Buy the playful wish-breaking novelty and watch customer videos." />
+  <title>One Wish Willow | Buy Now</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo-link" aria-label="One Wish Willow home">
+      <img src="assets/headertext.png" alt="One Wish Willow" />
+    </a>
+    <a class="top-buy cart-link" href="checkout.html">Cart <span data-cart-count>0</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-video">
+        <iframe
+          src="https://www.youtube.com/embed/Sw3QHS8VNhA?rel=0&modestbranding=1"
+          title="One Wish Willow featured video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+        <button class="hero-play-button" type="button" aria-label="Play featured video"></button>
+      </div>
+    </section>
+
+    <section class="intro-art">
+      <img src="assets/amaze-frame.png" alt="Amaze your friends" />
+      <p class="in-stock">Available now</p>
+    </section>
+
+    <section class="buy-section" id="buy">
+      <div class="product-media">
+        <img class="pyramid" src="assets/OWW-Pyramid-Motion-15fps.webp" alt="One Wish Willow product pyramid" />
+      </div>
+      <div class="product-copy">
+        <img class="curved-logo" src="assets/CurvedOWW.png" alt="One Wish Willow" />
+        <h1>One Wish Willow</h1>
+        <p class="tagline">The tiny wish-breaking novelty that turns a regular hangout into a "wait, what just happened?" moment.</p>
+        <div class="price-row">
+          <span class="price">$6.99</span>
+          <span class="stock">Available</span>
+        </div>
+        <div class="quantity-line">
+          <button type="button" data-qty="decrease" aria-label="Decrease quantity">-</button>
+          <output id="quantity">1</output>
+          <button type="button" data-qty="increase" aria-label="Increase quantity">+</button>
+        </div>
+        <p class="limit-note" data-limit-note>Limit 5 per order.</p>
+        <a class="buy-button" href="checkout.html" data-checkout-link>Buy Now</a>
+        <div class="benefits">
+          <span>Secure checkout</span>
+          <span>Fast shipping</span>
+          <span>In stock</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how">
+      <img class="section-art" src="assets/how-it-works.png" alt="How it works" />
+      <div class="steps">
+        <article>
+          <img src="assets/Crack1.png" alt="" />
+          <h2>Crack it</h2>
+          <p>Hold the willow, make the moment dramatic, and snap it when everyone is watching.</p>
+        </article>
+        <article>
+          <img src="assets/Crack2.png" alt="" />
+          <h2>Show the surprise</h2>
+          <p>Reveal the break, pass it around, and let the joke land like a tiny stage trick.</p>
+        </article>
+        <article>
+          <img src="assets/CurvedOWW.png" alt="" />
+          <h2>Make a memory</h2>
+          <p>Keep it playful. Film the reaction. No real magic claims, just a fun little spectacle.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="testimonials" id="reviews">
+      <img class="section-art" src="assets/testimonials.png" alt="What customers are saying" />
+      <div class="reel-carousel" aria-label="Swipe customer videos">
+        <article class="reel-card local-video">
+          <video src="assets/review-beforethecoffin-1.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">TikTok</span>
+        </article>
+        <article class="reel-card local-video">
+          <video src="assets/review-tiktok-2.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">TikTok</span>
+        </article>
+        <article class="reel-card local-video">
+          <video src="assets/review-ig-1.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">Instagram Reel</span>
+        </article>
+        <article class="reel-card local-video">
+          <video src="assets/review-ig-2.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">Instagram Reel</span>
+        </article>
+        <article class="reel-card local-video">
+          <video src="assets/review-ig-3.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">Instagram Reel</span>
+        </article>
+        <article class="reel-card local-video">
+          <video src="assets/review-ig-4.mp4" poster="assets/videocover.png" controls playsinline preload="metadata" data-autoposter></video>
+          <span class="platform">Instagram Reel</span>
+        </article>
+      </div>
+      <p class="swipe-note">Swipe sideways to see more videos.</p>
+    </section>
+
+    <section class="help-band">
+      <div>
+        <h2>Need Help?<br>Call Today!</h2>
+      </div>
+      <img src="assets/OWW-Pyramid-Motion-15fps.webp" alt="" />
+      <a href="tel:+12066715451">206-671-5451</a>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <img class="section-art" src="assets/FAQ.png" alt="FAQ" />
+      <div class="faq-list">
+        <details>
+          <summary>Is One Wish Willow in stock?</summary>
+          <p>Yes. This version of the page is set up for selling, not a sold-out drop.</p>
+        </details>
+        <details>
+          <summary>How many times can I wish?</summary>
+          <p>Single use only. The unit is ceremonially finite, commercially measurable, and deliberately bounded to one highly dramatic snap.</p>
+        </details>
+        <details>
+          <summary>Can I change my wish?</summary>
+          <p>Once performed, the wish should be treated as administratively irreversible. Think carefully before commencing the spectacle.</p>
+        </details>
+        <details>
+          <summary>Is there anything that I cannot wish for?</summary>
+          <p>Do not wish for time manipulation, resurrection, immortality, illegal outcomes, or additional One Wish Willows. The product is for entertainment only.</p>
+        </details>
+        <details>
+          <summary>What if I am dissatisfied with my wish?</summary>
+          <p>Wish interpretation remains under the exclusive jurisdiction of the wisher. One Wish Willow is not responsible for narrative disappointment, metaphysical ambiguity, or vibes-based regret.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="status.html">Check Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </footer>
+
+  <script src="script.js?v=decision9"></script>
+</body>
+</html>
+
+
+
+
+
