@@ -231,7 +231,7 @@ def save_outbox(to_email, subject, body, reason):
 
 
 def public_base_url():
-    return os.getenv("OWW_PUBLIC_BASE_URL", "http://127.0.0.1:4180").rstrip("/")
+    return (os.getenv("OWW_PUBLIC_BASE_URL") or os.getenv("RENDER_EXTERNAL_URL") or "http://127.0.0.1:4180").rstrip("/")
 
 
 def order_body(order):
