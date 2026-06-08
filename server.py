@@ -21,7 +21,15 @@ ORDERS_FILE = DATA_DIR / "orders.json"
 OUTBOX_DIR = DATA_DIR / "outbox"
 BACKUP_DIR = DATA_DIR / "backups"
 
-SHOP_EMAIL = os.getenv("OWW_FROM_EMAIL", "shoponewishwillow@gmail.com")
+
+def clean_env(key, default=""):
+    value = os.getenv(key, default)
+    if value is None:
+        return default
+    return value.replace("•", "").strip() or default
+
+
+SHOP_EMAIL = clean_env("OWW_FROM_EMAIL", "shoponewishwillow@gmail.com")
 
 
 def load_env_file():
@@ -74,11 +82,11 @@ def write_orders(orders):
 
 
 def supabase_configured():
-    return bool(os.getenv("SUPABASE_URL") and os.getenv("SUPABASE_SERVICE_ROLE_KEY"))
+    return bool(clean_env("SUPABASE_URL") and clean_env("SUPABASE_SERVICE_ROLE_KEY"))
 
 
 def supabase_headers(prefer="return=representation"):
-    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+    key = clean_env("SUPABASE_SERVICE_ROLE_KEY", "")
     headers = {
         "apikey": key,
         "Authorization": f"Bearer {key}",
@@ -90,7 +98,7 @@ def supabase_headers(prefer="return=representation"):
 
 
 def supabase_rest_url(path):
-    return f"{os.getenv('SUPABASE_URL', '').rstrip('/')}/rest/v1/{path.lstrip('/')}"
+    return f"{clean_env('SUPABASE_URL', '').rstrip('/')}/rest/v1/{path.lstrip('/')}"
 
 
 def supabase_request(method, path, payload=None, prefer="return=representation"):
@@ -149,7 +157,7 @@ def write_orders_to_supabase(orders):
 
 
 def admin_password():
-    return os.getenv("OWW_ADMIN_PASSWORD", "change-this-before-launch")
+    return clean_env("OWW_ADMIN_PASSWORD", "change-this-before-launch")
 
 
 def admin_session_value():
@@ -167,12 +175,12 @@ def parse_cookies(header):
 
 
 def send_email(to_email, subject, body):
-    host = os.getenv("OWW_SMTP_HOST", "smtp.gmail.com")
-    port = int(os.getenv("OWW_SMTP_PORT", "587"))
-    user = os.getenv("OWW_SMTP_USER", "")
-    password = os.getenv("OWW_SMTP_PASS", "")
-    from_email = os.getenv("OWW_FROM_EMAIL", SHOP_EMAIL)
-    from_name = os.getenv("OWW_FROM_NAME", "ONE WISH WILLOW")
+    host = clean_env("OWW_SMTP_HOST", "smtp.gmail.com")
+    port = int(clean_env("OWW_SMTP_PORT", "587"))
+    user = clean_env("OWW_SMTP_USER", "")
+    password = clean_env("OWW_SMTP_PASS", "")
+    from_email = clean_env("OWW_FROM_EMAIL", SHOP_EMAIL)
+    from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
     if not user or not password:
         save_outbox(to_email, subject, body, "SMTP credentials are not configured.")
         return False
@@ -191,12 +199,12 @@ def send_email(to_email, subject, body):
 
 
 def send_email_html(to_email, subject, text_body, html_body):
-    host = os.getenv("OWW_SMTP_HOST", "smtp.gmail.com")
-    port = int(os.getenv("OWW_SMTP_PORT", "587"))
-    user = os.getenv("OWW_SMTP_USER", "")
-    password = os.getenv("OWW_SMTP_PASS", "")
-    from_email = os.getenv("OWW_FROM_EMAIL", SHOP_EMAIL)
-    from_name = os.getenv("OWW_FROM_NAME", "ONE WISH WILLOW")
+    host = clean_env("OWW_SMTP_HOST", "smtp.gmail.com")
+    port = int(clean_env("OWW_SMTP_PORT", "587"))
+    user = clean_env("OWW_SMTP_USER", "")
+    password = clean_env("OWW_SMTP_PASS", "")
+    from_email = clean_env("OWW_FROM_EMAIL", SHOP_EMAIL)
+    from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
     if not user or not password:
         save_outbox(to_email, subject, text_body, "SMTP credentials are not configured.")
         return False
@@ -221,7 +229,7 @@ def save_outbox(to_email, subject, body, reason):
     filename = f"{time.strftime('%Y%m%d-%H%M%S')}-{safe_subject or 'email'}.txt"
     content = "\n".join([
         f"To: {to_email}",
-        f"From: {os.getenv('OWW_FROM_EMAIL', SHOP_EMAIL)}",
+        f"From: {clean_env('OWW_FROM_EMAIL', SHOP_EMAIL)}",
         f"Subject: {subject}",
         f"Not sent reason: {reason}",
         "",
@@ -231,7 +239,7 @@ def save_outbox(to_email, subject, body, reason):
 
 
 def public_base_url():
-    return (os.getenv("OWW_PUBLIC_BASE_URL") or os.getenv("RENDER_EXTERNAL_URL") or "http://127.0.0.1:4180").rstrip("/")
+    return (clean_env("OWW_PUBLIC_BASE_URL") or clean_env("RENDER_EXTERNAL_URL") or "http://127.0.0.1:4180").rstrip("/")
 
 
 def order_body(order):
@@ -495,7 +503,7 @@ class Handler(SimpleHTTPRequestHandler):
             orders.append(order)
             write_orders(orders)
             try:
-                admin_email = os.getenv("OWW_ADMIN_EMAIL", "onewillowish@gmail.com")
+                admin_email = clean_env("OWW_ADMIN_EMAIL", "onewillowish@gmail.com")
                 send_email_html(admin_email, f"PAID ORDER {order_number} - {order.get('total')}", order_body(order), order_html(order))
             except Exception as exc:
                 save_outbox(admin_email, f"PAID ORDER {order_number} - {order.get('total')}", order_body(order), str(exc))
@@ -526,8 +534,9 @@ class Handler(SimpleHTTPRequestHandler):
 def main():
     load_env_file()
     ensure_store()
-    port = int(os.getenv("PORT", "4180"))
-    host = os.getenv("HOST", "0.0.0.0")
+    raw_port = clean_env("PORT", "4180")
+    port = int(raw_port) if raw_port.isdigit() else 10000 if clean_env("RENDER") else 4180
+    host = "0.0.0.0" if clean_env("RENDER") else clean_env("HOST", "0.0.0.0")
     server = ThreadingHTTPServer((host, port), Handler)
     print(f"One Wish Willow backend running at http://127.0.0.1:{port}/")
     print(f"Admin page: http://127.0.0.1:{port}/admin.html")
