@@ -1,0 +1,71 @@
+ONE WISH WILLOW SAFE LAUNCH STEPS
+
+This is a plain text checklist for launching the store. It contains no scripts, no secrets, and no executable code.
+
+1. Accounts to create
+
+- GitHub
+- Render
+- Supabase
+- A domain registrar for your custom domain
+
+2. Supabase setup
+
+- Create a new Supabase project.
+- Open the SQL editor.
+- Run the SQL from supabase-schema.sql.
+- Copy the project URL and service role key into Render environment variables.
+
+3. GitHub setup
+
+- Create a new private or public repository.
+- Upload the project files.
+- Do not upload .env, the work folder, backups, cloudflared.exe, cache files, or pycache folders.
+
+4. Render setup
+
+- Create a new Web Service.
+- Connect the GitHub repository.
+- Use this start command:
+  python server.py
+- Add these environment variables in Render:
+  OWW_ADMIN_PASSWORD
+  OWW_PUBLIC_BASE_URL
+  OWW_SMTP_HOST
+  OWW_SMTP_PORT
+  OWW_SMTP_USER
+  OWW_SMTP_PASSWORD
+  OWW_SMTP_SENDER
+  OWW_ADMIN_EMAIL
+  SUPABASE_URL
+  SUPABASE_SERVICE_ROLE_KEY
+
+5. Domain setup
+
+- Add the custom domain inside Render.
+- Copy the DNS record Render gives you.
+- Paste that DNS record into your domain provider.
+- Wait for the secure certificate to finish.
+- Update OWW_PUBLIC_BASE_URL to your final domain.
+
+6. Final store test
+
+- Open the home page.
+- Add one item to cart.
+- Go through checkout.
+- Press I Paid.
+- Confirm the admin email arrives.
+- Approve one test order.
+- Confirm the customer page changes to approved.
+- Confirm the customer confirmation email sends.
+- Reject one test order.
+- Confirm the customer page changes to rejected.
+
+7. Before sharing the store
+
+- Change the admin password to something private.
+- Keep the Gmail app password secret.
+- Keep the Supabase service role key secret.
+- Save one test order number so you can verify the status page later.
+
+You are ready to launch when the public site opens, checkout works, admin approve and reject works, and both admin and customer emails send correctly.
