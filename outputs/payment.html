@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment | One Wish Willow</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="payment">
+  <header class="site-header">
+    <a href="index.html" class="logo-link" aria-label="One Wish Willow home">
+      <img src="assets/headertext.png" alt="One Wish Willow" />
+    </a>
+    <a class="top-buy cart-link" href="checkout.html">Cart <span data-cart-count>0</span></a>
+  </header>
+
+  <main class="checkout-shell">
+    <a class="back-link" href="checkout.html">&lt; Shipping</a>
+    <section class="payment-grid">
+      <div class="payment-copy">
+        <h1>Payment</h1>
+        <p>Please transfer the exact amount shown below. For now, we are only accepting Cash App. After payment is reviewed, an order update will be sent to the email address provided within 1 to 3 business days.</p>
+        <p class="warning">Make sure the email is correct. If the email is wrong, updates may not reach you.</p>
+        <div class="shipping-confirm" data-shipping-confirm>
+          <h2>Confirm Shipping Info</h2>
+          <p data-shipping-summary>Shipping details have not been added yet.</p>
+          <a class="qr-toggle" href="checkout.html">Edit Shipping</a>
+        </div>
+        <div class="summary-lines large">
+          <div><span>Quantity</span><strong data-payment-quantity>1</strong></div>
+          <div><span>Shipping</span><strong data-payment-shipping>+ $4.00 shipping</strong></div>
+          <div><span>Total</span><strong data-payment-total>$10.99</strong></div>
+        </div>
+        <div class="mobile-cashapp-panel" data-mobile-cashapp>
+          <p>On your phone, tap the Cash App button below, enter the exact total, and submit the transfer.</p>
+          <a class="buy-button cashapp-button" href="https://cash.app/$abath47" target="_blank" rel="noopener" data-cashapp-link>Open Cash App</a>
+          <button class="qr-toggle" type="button" data-show-qr>Show QR Code Instead</button>
+        </div>
+        <div class="payment-help">
+          <h2>Need help paying?</h2>
+          <p>Use Cash App only. Send the exact total shown on this page, then return here and tap <strong>I Paid!</strong>. If the amount, email, or shipping details do not match, the order may be rejected.</p>
+        </div>
+        <button class="buy-button paid-button" type="button" data-paid-button>I Paid!</button>
+        <p class="paid-note">Only tap <strong>I Paid!</strong> after sending the Cash App payment. If payment is missing, incorrect, or sent with wrong customer details, the order may be delayed or rejected.</p>
+      </div>
+      <div class="qr-panel" data-qr-panel>
+        <img src="assets/payment-qr.png" alt="Payment QR code" />
+        <p>Scan this QR and transfer the exact total shown.</p>
+      </div>
+    </section>
+
+    <section class="paid-flow" data-paid-flow hidden>
+      <div class="wish-loader" aria-hidden="true"></div>
+      <h1 data-paid-title>Checking Your Wish</h1>
+      <div class="order-number-chip">
+        <span data-order-number-display>Order number pending</span>
+        <button class="copy-order-button" type="button" data-copy-order aria-label="Copy order number">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+            <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+          </svg>
+        </button>
+      </div>
+      <p data-paid-message>This can take 3 to 10 minutes. Please be patient while the order details are reviewed.</p>
+      <p class="paid-note" data-order-status-line>Submitting your order to ONE WISH WILLOW...</p>
+      <p class="warning" data-submit-error hidden>Order did not reach the backend. Please open the site from http://10.0.0.7:4180/ while on the same Wi-Fi and try again.</p>
+      <a class="buy-button email-order-button" href="#" data-order-email>Email Order Details</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="status.html">Check Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </footer>
+  <script src="script.js?v=launch1"></script>
+</body>
+</html>
+
+
+
+
+
