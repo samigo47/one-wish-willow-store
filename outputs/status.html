@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Status | One Wish Willow</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="status">
+  <header class="site-header">
+    <a href="index.html" class="logo-link" aria-label="One Wish Willow home">
+      <img src="assets/headertext.png" alt="One Wish Willow" />
+    </a>
+    <a class="top-buy cart-link" href="checkout.html">Cart <span data-cart-count>0</span></a>
+  </header>
+
+  <main class="checkout-shell">
+    <a class="back-link" href="index.html">&lt; Home</a>
+    <section class="status-panel">
+      <h1>Check Status</h1>
+      <p>Enter your order number to see whether your wish is still waiting, approved, or rejected.</p>
+      <form class="status-form" data-status-form>
+        <label>
+          Order Number
+          <input type="text" data-status-input placeholder="OWW-..." autocomplete="off" />
+        </label>
+        <button class="buy-button" type="submit">Check Order</button>
+      </form>
+      <div class="status-result" data-status-result hidden></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="status.html">Check Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </footer>
+
+  <script src="script.js?v=decision7"></script>
+</body>
+</html>
