@@ -113,7 +113,7 @@ a {
 }
 
 .hero-video iframe {
-  transform: scale(1.015);
+  transform: scale(1);
 }
 
 @media (max-width: 720px) {
