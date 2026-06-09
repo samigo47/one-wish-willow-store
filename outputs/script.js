@@ -552,7 +552,7 @@ function renderStatusResult(order, errorMessage = "") {
     : state === "shipped"
       ? "Your order has shipped. Your One Wish Willow is now traveling toward your doorstep."
     : state === "rejected"
-      ? `Your order was rejected. ${order.reviewReason || "Please check your email for the review reason."}`
+      ? `Your order was rejected. ${order.reviewReason || "Please contact support with your order number if you need the review reason."}`
       : "Your order is still waiting for payment review.";
   result.innerHTML = `
     <h2>${state === "approved" ? "Wish Approved" : state === "shipped" ? "Wish Shipped" : state === "rejected" ? "Wish Not Approved" : "Still Reviewing"}</h2>
