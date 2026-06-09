@@ -169,54 +169,6 @@ async function submitPaidOrder(order) {
   return result.order || result;
 }
 
-async function notifyAdminViaFormSubmit(order) {
-  const message = [
-    "A customer clicked I PAID on the One Wish Willow checkout.",
-    "",
-    `Order number: ${order.orderNumber}`,
-    `Product: ${order.product}`,
-    `Quantity: ${order.quantity}`,
-    `Subtotal: ${order.subtotal}`,
-    `Shipping: ${order.shippingCost}`,
-    `Total: ${order.total}`,
-    `Payment method: ${order.paymentMethod}`,
-    "",
-    "Customer details:",
-    `Name: ${order.customerName}`,
-    `Email: ${order.customerEmail}`,
-    `Phone: ${order.phone}`,
-    `Address: ${order.address}`,
-    `City: ${order.city}`,
-    `State: ${order.state}`,
-    `ZIP: ${order.zip}`,
-    "",
-    `Submitted: ${order.submittedAt}`,
-    `Admin: ${window.location.origin}/admin.html`,
-    "",
-    "Review payment, then approve or reject the order."
-  ].join("\n");
-
-  const response = await fetch(`https://formsubmit.co/ajax/${productConfig.orderInbox}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      _subject: `PAID ORDER ${order.orderNumber} - ${order.total}`,
-      _template: "table",
-      _captcha: "false",
-      name: order.customerName,
-      email: order.customerEmail,
-      orderNumber: order.orderNumber,
-      total: order.total,
-      message
-    })
-  });
-  if (!response.ok) throw new Error("Order email fallback failed");
-  return response.json();
-}
-
 async function fetchOrderStatus(orderNumberValue) {
   return api(`/api/orders/${encodeURIComponent(orderNumberValue)}`);
 }
@@ -288,7 +240,7 @@ function showPaidFlow(state = "pending") {
 
   if (state === "approved") {
     title.textContent = "Wish Approved";
-    message.textContent = "Your payment has been approved. Your One Wish Willow is being prepared for its trip to your doorstep and should be delivered in 3 to 14 business days. A confirmation email will be sent to you soon. Your wish is on the way home.";
+    message.textContent = "Your payment has been approved. Your One Wish Willow is being prepared for its trip to your doorstep and should be delivered in 3 to 14 business days. Your wish is on the way home.";
     statusLine?.setAttribute("hidden", "");
     emailButton?.setAttribute("hidden", "");
     errorNode?.setAttribute("hidden", "");
@@ -300,7 +252,7 @@ function showPaidFlow(state = "pending") {
     errorNode?.setAttribute("hidden", "");
   } else if (state === "rejected") {
     title.textContent = "Wish Not Approved";
-    message.textContent = "We are sorry, but this order was rejected. A message will be sent explaining why. Please check that your email, shipping information, and payment screenshot are correct if you want us to review it again.";
+    message.textContent = "We are sorry, but this order was rejected. Please check that your email, shipping information, and payment screenshot are correct if you want us to review it again.";
     statusLine?.setAttribute("hidden", "");
     emailButton?.setAttribute("hidden", "");
     errorNode?.setAttribute("hidden", "");
@@ -309,7 +261,12 @@ function showPaidFlow(state = "pending") {
     message.textContent = "This can take 3 to 10 minutes. Please be patient while the order details are reviewed.";
     statusLine?.removeAttribute("hidden");
     if (statusLine) statusLine.textContent = "Waiting for approval. This page will update automatically.";
-    emailButton?.removeAttribute("hidden");
+    if (emailButton) {
+      emailButton.removeAttribute("hidden");
+      emailButton.removeAttribute("href");
+      emailButton.dataset.emailFallback = "false";
+      emailButton.textContent = "Order Saved For Review";
+    }
   }
 }
 
@@ -395,7 +352,9 @@ function setupPaidButton() {
     localStorage.setItem("owwPaidOrder", JSON.stringify(order));
     localStorage.setItem("owwOrderStatus", "pending");
     localStorage.setItem("owwPaidSubmitted", "true");
-    emailButton.href = orderEmailLink(order);
+    emailButton.removeAttribute("href");
+    emailButton.dataset.emailFallback = "false";
+    emailButton.textContent = "Order Saved For Review";
     showPaidFlow("pending");
     const statusLine = document.querySelector("[data-order-status-line]");
     const errorNode = document.querySelector("[data-submit-error]");
@@ -407,25 +366,16 @@ function setupPaidButton() {
       localStorage.setItem("owwOrderNumber", saved.orderNumber || order.orderNumber);
       setOrderNumberDisplay(saved.orderNumber || order.orderNumber);
       putOrderNumberInUrl(saved.orderNumber || order.orderNumber);
-      let notified = false;
-      try {
-        await notifyAdminViaFormSubmit(saved);
-        notified = true;
-      } catch {
-        emailButton.href = orderEmailLink(saved);
-        emailButton.textContent = "Email Order Details";
-      }
-      if (notified) {
-        emailButton.textContent = "Order Sent For Review";
-        emailButton.removeAttribute("href");
-      }
-      if (statusLine) statusLine.textContent = notified
-        ? `Order ${saved.orderNumber || order.orderNumber} was sent for review. Watch your email for updates.`
-        : `Order ${saved.orderNumber || order.orderNumber} was saved. Tap Email Order Details if the automatic notice does not arrive.`;
+      emailButton.textContent = "Order Saved For Review";
+      emailButton.removeAttribute("href");
+      emailButton.dataset.emailFallback = "false";
+      if (statusLine) statusLine.textContent = `Order ${saved.orderNumber || order.orderNumber} was saved for review. Keep this page open; it will update after approval or rejection.`;
       startStatusPolling(saved.orderNumber || order.orderNumber);
     } catch {
       errorNode?.removeAttribute("hidden");
       if (statusLine) statusLine.textContent = "Order could not reach the backend from this page.";
+      emailButton.dataset.emailFallback = "true";
+      emailButton.href = orderEmailLink(order);
       emailButton.textContent = "Email Order Details";
       window.setTimeout(() => {
         emailButton.focus();
@@ -433,7 +383,11 @@ function setupPaidButton() {
     }
   });
 
-  emailButton.addEventListener("click", () => {
+  emailButton.addEventListener("click", (event) => {
+    if (emailButton.dataset.emailFallback !== "true") {
+      event.preventDefault();
+      return;
+    }
     const order = buildOrder();
     emailButton.href = orderEmailLink(order);
   });
@@ -532,7 +486,7 @@ function setupAdminPage() {
         body: JSON.stringify({ reason: rejectionReason })
       });
       const status = result.order?.status || (action === "approve" ? "approved" : "rejected");
-      adminNotice.textContent = `${orderNumberValue} is now ${status}. The customer page will update automatically if it is open, and an email was sent if the address is valid.`;
+      adminNotice.textContent = `${orderNumberValue} is now ${status}. The customer page will update automatically if it is open.`;
       await render();
     } catch {
       button.disabled = false;
