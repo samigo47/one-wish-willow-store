@@ -29,7 +29,12 @@ def clean_env(key, default=""):
     return value.replace("•", "").strip() or default
 
 
-SHOP_EMAIL = clean_env("OWW_FROM_EMAIL", "shoponewishwillow@gmail.com")
+def clean_email_env(key, default):
+    value = clean_env(key, default)
+    return value if "@" in value and "." in value else default
+
+
+SHOP_EMAIL = clean_email_env("OWW_FROM_EMAIL", "shoponewishwillow@gmail.com")
 
 
 def load_env_file():
@@ -175,11 +180,11 @@ def parse_cookies(header):
 
 
 def send_email(to_email, subject, body):
-    host = clean_env("OWW_SMTP_HOST", "smtp.gmail.com")
-    port = int(clean_env("OWW_SMTP_PORT", "587"))
-    user = clean_env("OWW_SMTP_USER", "")
+    host = "smtp.gmail.com"
+    port = 587
+    user = clean_email_env("OWW_SMTP_USER", SHOP_EMAIL)
     password = clean_env("OWW_SMTP_PASS", "")
-    from_email = clean_env("OWW_FROM_EMAIL", SHOP_EMAIL)
+    from_email = clean_email_env("OWW_FROM_EMAIL", SHOP_EMAIL)
     from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
     if not user or not password:
         save_outbox(to_email, subject, body, "SMTP credentials are not configured.")
@@ -199,11 +204,11 @@ def send_email(to_email, subject, body):
 
 
 def send_email_html(to_email, subject, text_body, html_body):
-    host = clean_env("OWW_SMTP_HOST", "smtp.gmail.com")
-    port = int(clean_env("OWW_SMTP_PORT", "587"))
-    user = clean_env("OWW_SMTP_USER", "")
+    host = "smtp.gmail.com"
+    port = 587
+    user = clean_email_env("OWW_SMTP_USER", SHOP_EMAIL)
     password = clean_env("OWW_SMTP_PASS", "")
-    from_email = clean_env("OWW_FROM_EMAIL", SHOP_EMAIL)
+    from_email = clean_email_env("OWW_FROM_EMAIL", SHOP_EMAIL)
     from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
     if not user or not password:
         save_outbox(to_email, subject, text_body, "SMTP credentials are not configured.")
@@ -229,7 +234,7 @@ def save_outbox(to_email, subject, body, reason):
     filename = f"{time.strftime('%Y%m%d-%H%M%S')}-{safe_subject or 'email'}.txt"
     content = "\n".join([
         f"To: {to_email}",
-        f"From: {clean_env('OWW_FROM_EMAIL', SHOP_EMAIL)}",
+        f"From: {clean_email_env('OWW_FROM_EMAIL', SHOP_EMAIL)}",
         f"Subject: {subject}",
         f"Not sent reason: {reason}",
         "",
@@ -503,7 +508,7 @@ class Handler(SimpleHTTPRequestHandler):
             orders.append(order)
             write_orders(orders)
             try:
-                admin_email = clean_env("OWW_ADMIN_EMAIL", "onewillowish@gmail.com")
+                admin_email = clean_email_env("OWW_ADMIN_EMAIL", "onewillowish@gmail.com")
                 send_email_html(admin_email, f"PAID ORDER {order_number} - {order.get('total')}", order_body(order), order_html(order))
             except Exception as exc:
                 save_outbox(admin_email, f"PAID ORDER {order_number} - {order.get('total')}", order_body(order), str(exc))
