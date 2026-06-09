@@ -535,7 +535,10 @@ def main():
     load_env_file()
     ensure_store()
     raw_port = clean_env("PORT", "4180")
-    port = int(raw_port) if raw_port.isdigit() else 10000 if clean_env("RENDER") else 4180
+    if clean_env("RENDER"):
+        port = int(raw_port) if raw_port.isdigit() and int(raw_port) >= 1000 else 10000
+    else:
+        port = int(raw_port) if raw_port.isdigit() else 4180
     host = "0.0.0.0" if clean_env("RENDER") else clean_env("HOST", "0.0.0.0")
     server = ThreadingHTTPServer((host, port), Handler)
     print(f"One Wish Willow backend running at http://127.0.0.1:{port}/")
