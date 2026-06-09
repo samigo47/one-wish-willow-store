@@ -169,6 +169,54 @@ async function submitPaidOrder(order) {
   return result.order || result;
 }
 
+async function notifyAdminViaFormSubmit(order) {
+  const message = [
+    "A customer clicked I PAID on the One Wish Willow checkout.",
+    "",
+    `Order number: ${order.orderNumber}`,
+    `Product: ${order.product}`,
+    `Quantity: ${order.quantity}`,
+    `Subtotal: ${order.subtotal}`,
+    `Shipping: ${order.shippingCost}`,
+    `Total: ${order.total}`,
+    `Payment method: ${order.paymentMethod}`,
+    "",
+    "Customer details:",
+    `Name: ${order.customerName}`,
+    `Email: ${order.customerEmail}`,
+    `Phone: ${order.phone}`,
+    `Address: ${order.address}`,
+    `City: ${order.city}`,
+    `State: ${order.state}`,
+    `ZIP: ${order.zip}`,
+    "",
+    `Submitted: ${order.submittedAt}`,
+    `Admin: ${window.location.origin}/admin.html`,
+    "",
+    "Review payment, then approve or reject the order."
+  ].join("\n");
+
+  const response = await fetch(`https://formsubmit.co/ajax/${productConfig.orderInbox}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      _subject: `PAID ORDER ${order.orderNumber} - ${order.total}`,
+      _template: "table",
+      _captcha: "false",
+      name: order.customerName,
+      email: order.customerEmail,
+      orderNumber: order.orderNumber,
+      total: order.total,
+      message
+    })
+  });
+  if (!response.ok) throw new Error("Order email fallback failed");
+  return response.json();
+}
+
 async function fetchOrderStatus(orderNumberValue) {
   return api(`/api/orders/${encodeURIComponent(orderNumberValue)}`);
 }
@@ -359,9 +407,21 @@ function setupPaidButton() {
       localStorage.setItem("owwOrderNumber", saved.orderNumber || order.orderNumber);
       setOrderNumberDisplay(saved.orderNumber || order.orderNumber);
       putOrderNumberInUrl(saved.orderNumber || order.orderNumber);
-      emailButton.textContent = "Order Sent For Review";
-      emailButton.removeAttribute("href");
-      if (statusLine) statusLine.textContent = `Order ${saved.orderNumber || order.orderNumber} was sent for review. Watch your email for updates.`;
+      let notified = false;
+      try {
+        await notifyAdminViaFormSubmit(saved);
+        notified = true;
+      } catch {
+        emailButton.href = orderEmailLink(saved);
+        emailButton.textContent = "Email Order Details";
+      }
+      if (notified) {
+        emailButton.textContent = "Order Sent For Review";
+        emailButton.removeAttribute("href");
+      }
+      if (statusLine) statusLine.textContent = notified
+        ? `Order ${saved.orderNumber || order.orderNumber} was sent for review. Watch your email for updates.`
+        : `Order ${saved.orderNumber || order.orderNumber} was saved. Tap Email Order Details if the automatic notice does not arrive.`;
       startStatusPolling(saved.orderNumber || order.orderNumber);
     } catch {
       errorNode?.removeAttribute("hidden");
