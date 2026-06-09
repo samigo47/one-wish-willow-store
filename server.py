@@ -26,7 +26,9 @@ def clean_env(key, default=""):
     value = os.getenv(key, default)
     if value is None:
         return default
-    return value.replace("•", "").strip() or default
+    if "•" in value:
+        value = value.replace("•", "").replace(" ", "")
+    return value.strip() or default
 
 
 def clean_email_env(key, default):
