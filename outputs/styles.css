@@ -113,7 +113,13 @@ a {
 }
 
 .hero-video iframe {
-  transform: scale(1.035);
+  transform: scale(1.015);
+}
+
+@media (max-width: 720px) {
+  .hero-video iframe {
+    transform: scale(1.035);
+  }
 }
 
 .intro-art {
