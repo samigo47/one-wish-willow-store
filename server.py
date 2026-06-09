@@ -187,6 +187,13 @@ def parse_cookies(header):
     return cookies
 
 
+def smtp_disabled():
+    configured = clean_env("OWW_DISABLE_SMTP", "")
+    if configured:
+        return configured.lower() in {"1", "true", "yes", "on"}
+    return bool(clean_env("RENDER", ""))
+
+
 def send_email(to_email, subject, body):
     host = "smtp.gmail.com"
     port = 587
@@ -194,6 +201,9 @@ def send_email(to_email, subject, body):
     password = clean_env("OWW_SMTP_PASS", "")
     from_email = clean_email_env("OWW_FROM_EMAIL", SHOP_EMAIL)
     from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
+    if smtp_disabled():
+        save_outbox(to_email, subject, body, "SMTP is disabled for this Render deployment.")
+        return False
     if not user or not password:
         save_outbox(to_email, subject, body, "SMTP credentials are not configured.")
         return False
@@ -218,6 +228,9 @@ def send_email_html(to_email, subject, text_body, html_body):
     password = clean_env("OWW_SMTP_PASS", "")
     from_email = clean_email_env("OWW_FROM_EMAIL", SHOP_EMAIL)
     from_name = clean_env("OWW_FROM_NAME", "ONE WISH WILLOW")
+    if smtp_disabled():
+        save_outbox(to_email, subject, text_body, "SMTP is disabled for this Render deployment.")
+        return False
     if not user or not password:
         save_outbox(to_email, subject, text_body, "SMTP credentials are not configured.")
         return False
