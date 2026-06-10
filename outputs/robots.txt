@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /payment.html
+Disallow: /status.html
+Disallow: /api/
+
+Sitemap: https://one-wish-willow-store.onrender.com/sitemap.xml
